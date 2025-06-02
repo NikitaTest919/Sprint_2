@@ -1,5 +1,5 @@
 class EmployeeSalary:
-    hourly_payment = 400
+    hourly_payment = 400  # Почасовая оплата
 
     def __init__(self, name, hours=None, rest_days=0, email=None):
         self.name = name
@@ -7,24 +7,29 @@ class EmployeeSalary:
         self.rest_days = rest_days
         self.email = email
 
-    def get_hours(self):
-        if self.hours is None:
-            self.hours = (7 - self.rest_days) * 8
-        return self.hours
+    @classmethod
+    def get_hours(cls, hours, rest_days):
+        if hours is None:
+            hours = (7 - rest_days) * 8
+        return hours
 
-    def get_email(self):
-        if self.email is None:
-            self.email = f"{self.name}@email.com"
-        return self.email
+    @classmethod
+    def get_email(cls, name, email):
+        if email is None:
+            email = f"{name}@email.com"
+        return email
 
     @classmethod
     def set_hourly_payment(cls, new_payment):
         cls.hourly_payment = new_payment
 
     def salary(self):
-        return self.get_hours() * self.hourly_payment
+        actual_hours = self.get_hours(self.hours, self.rest_days)
+        return actual_hours * self.hourly_payment
+
 
 employee = EmployeeSalary(name="Ivan", rest_days=2)
-print(f"Часы работы: {employee.get_hours()}")
-print(f"Email: {employee.get_email()}")
+
+print(f"Часы работы: {EmployeeSalary.get_hours(employee.hours, employee.rest_days)}")
+print(f"Email: {EmployeeSalary.get_email(employee.name, employee.email)}")
 print(f"Заработная плата: {employee.salary()}")
